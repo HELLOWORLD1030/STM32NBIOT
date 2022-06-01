@@ -39,3 +39,5 @@
 ..\obj\main.o: ..\SYSTEM\delay\delay.h
 ..\obj\main.o: D:\MDK\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\main.o: ..\HARDWARE\ITEMP\tsensor.h
+..\obj\main.o: ..\SYSTEM\cJson\cJson.h
+..\obj\main.o: D:\MDK\ARM\ARMCC\Bin\..\include\stddef.h

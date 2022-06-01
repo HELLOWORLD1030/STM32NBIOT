@@ -6,6 +6,7 @@
 #include "delay.h"
 #include <string.h>
 #include "tsensor.h"
+#include "cJson.h"
 unsigned char addr = 0;
 unsigned int i;
 unsigned char Query(char * src,char * des,unsigned int LEN);
@@ -30,6 +31,7 @@ void SendData();
 float GetTemp();
 float temp;
 char Receive_BUF[500]={0};
+int setRun=1;
 uint8_t get_sub_str(char * str,char * separator1,char * separator2,int8_t num, char * substr);
 char Receive_Data[250]={0};
 int main(void)
@@ -209,7 +211,7 @@ USART1TxStr("订阅MQTT主题\r\n");
 n_str = (3-n)+'0';
 LCD_ShowString(8*1-3,16*9,&n_str);
 LCD_ShowString(8*2,16*9,"subscribing ...");
-USART2TxStr("AT+QMTSUB=0,1,\"download_flag\",0\r\n");//
+USART2TxStr("AT+QMTSUB=0,1,\"run_flag\",0\r\n");//
 	if(!Wait_Str1_Str2_x_100ms(2,1,1,"+QMTSUB: 0,1,0,0","",100))
 	{
 		n = 0;
@@ -449,7 +451,14 @@ void trim_string(char *str)
 	}
 }
 void SendData(){
+	int id ;
+	cJSON* cjson;
+	cJSON* payload;
+	cJSON* setRUN;
 	char tipStirng[25]={0};
+	char tempString[255]={0};
+	char jsonTemp[255]={0};
+	int index;
 int n1=0;
 IntToChar(seqNum,seqNum1);
 temp=GetTemp();
@@ -457,13 +466,34 @@ sprintf(NB_Send_buf1,"AT+QMTPUB=0,0,0,0,\"upload_data_flag\",\"{\"Test_flag\":\"
 if(!Wait_Str1_Str2_x_100ms(2,1,1,"+QMTRECV:","",20)){
 	strcpy(Receive_BUF,USART2_RX_BUF);
 	
-	USART1TxStr("sadjlkasdjkskldj");
+	USART1TxStr("\r\n");
 	get_sub_str((char *)Receive_BUF,",","\r\n",2,Receive_Data);
-	USART1TxStr(Receive_Data);
 	
+	
+	for(index=1;index<strlen(Receive_Data)-1;index++){
+		tempString[index-1]=Receive_Data[index];
+	}
+	//USART1TxStr(tempString);
+	
+	cjson = cJSON_Parse(tempString);
+	id = cJSON_GetObjectItem(cjson,"taskId")->valueint;
+	payload=cJSON_GetObjectItem(cjson,"payload");
+	setRun=cJSON_GetObjectItem(payload,"run_flag")->valueint;
+	sprintf(jsonTemp,"test:%d",setRun);
+	USART1TxStr(jsonTemp);//打包成功调用cJSON_Print打印输出
+	//LCD_ShowString(8*2,16*12,setRun);
+	
+	cJSON_Delete(cjson);
+	cJSON_Delete(payload);
+
 }
+if(setRun==0){
+	return;
+}
+//USART2TxStr("AT\r\n");//测试 NB 模块
 //USART1TxStr(NB_Send_buf1);
 //USART1TxStr("\r\n");
+
 USART2TxStr((char*)NB_Send_buf1);//通过 NB 模块发送数据
 LCD_ShowString(8*2,16*12,"send....");
 if(!Wait_Str1_Str2_x_100ms(2,1,1,"OK","",20)) //如果收到发送成功返回的数据
@@ -493,6 +523,7 @@ for(i = addr;i < 355;i ++)
 NB_Send_buf1[i] = 0;
 }
 CLR_Buf2();
+
 }
 float GetTemp(){
 	int temp;

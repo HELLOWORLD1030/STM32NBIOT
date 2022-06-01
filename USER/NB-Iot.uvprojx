@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\USER;..\STM32F10X_FWLIB\inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\lcd;..\HARDWARE\spi;..\HARDWARE\gpio;..\HARDWARE\ITEMP</IncludePath>
+              <IncludePath>..\CORE;..\USER;..\STM32F10X_FWLIB\inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\lcd;..\HARDWARE\spi;..\HARDWARE\gpio;..\HARDWARE\ITEMP;..\SYSTEM\cJson</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -552,6 +552,16 @@
               <FileName>usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SYSTEM\usart\usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>cJSON.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SYSTEM\cJson\cJSON.c</FilePath>
+            </File>
+            <File>
+              <FileName>cJSON.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SYSTEM\cJson\cJSON.h</FilePath>
             </File>
           </Files>
         </Group>

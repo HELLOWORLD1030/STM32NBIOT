@@ -38,6 +38,10 @@ struct __FILE
 int handle; 
 }; 
 FILE __stdout; 
+void _ttywrch(int ch)
+{
+ch = ch;
+}
 //定义_sys_exit()以避免使用半主机模式 
 _sys_exit(int x) 
 { 
