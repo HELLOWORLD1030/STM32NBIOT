@@ -1,0 +1,86 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: µVision V5.34.0.0
+Copyright (C) 2021 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: fsf zzg373692503@hotmail.com, fsf, LIC=JDA12-98P1T-06JQU-SD717-IHFER-TU8XL
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.34.0.0
+Toolchain Path:  D:\MDK\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 7 (build 960)
+Assembler:       Armasm.exe V5.06 update 7 (build 960)
+Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
+Library Manager: ArmAr.exe V5.06 update 7 (build 960)
+Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
+CPU DLL:         SARMCM3.DLL V5.34.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.8.0
+Dialog DLL:      TCM.DLL V1.48.0.0
+ 
+<h2>Project:</h2>
+E:\NB-Iot - MQTT\USER\NB-Iot.uvprojx
+Project File Date:  06/01/2022
+
+<h2>Output:</h2>
+  
+Warning: *** SUPPORT EXPIRED, NEW PRODUCT SERIAL NUMBER REQUIRED ***
+         *** Running with Code Size Limit: 32K                   ***
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\MDK\ARM\ARMCC\Bin'
+Build target 'NB-Iot'
+compiling main.c...
+..\HARDWARE\lcd\lcd.h(70): warning:  #1-D: last line of file ends without a newline
+  #endif /* __OLED_H */
+..\HARDWARE\spi\spi.h(8): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\SYSTEM\usart\usart.h(43): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\gpio\GPIO.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif /* __GPIO_H */
+main.c(29): warning:  #1295-D: Deprecated declaration SendData - give arg types
+  void SendData();
+main.c(30): warning:  #1295-D: Deprecated declaration GetTemp - give arg types
+  float GetTemp();
+main.c(71): warning:  #223-D: function "TIM3_Int_Init" declared implicitly
+  TIM3_Int_Init(999,7199); //?????????? 3?????? 100ms
+main.c(65): warning:  #177-D: variable "NB_Send_buf"  was declared but never referenced
+  unsigned char NB_Send_buf[355]={0};
+main.c(66): warning:  #177-D: variable "n"  was declared but never referenced
+  unsigned char n;
+main.c(168): warning:  #69-D: integer conversion resulted in truncation
+  	if(!Wait_Str1_Str2_x_100ms(2,1,1,"+QMTOPEN: 0,0","",300))
+main.c(109): warning:  #177-D: variable "j"  was declared but never referenced
+  unsigned int i,j,n = 3;
+main.c(111): warning:  #550-D: variable "temp_str"  was set but never used
+  char temp_str[30];
+main.c(458): warning:  #167-D: argument of type "unsigned char *" is incompatible with parameter of type "const char *restrict"
+  	strcpy(Receive_BUF,USART2_RX_BUF);
+main.c(453): warning:  #550-D: variable "n1"  was set but never used
+  int n1=0;
+main.c(498): warning:  #177-D: variable "temp"  was declared but never referenced
+  	int temp;
+main.c(500): warning:  #550-D: variable "TempInt"  was set but never used
+  	int TempInt;
+main.c: 16 warnings, 0 errors
+linking...
+Program Size: Code=17226 RO-data=2730 RW-data=132 ZI-data=5124  
+FromELF: creating hex file...
+"..\OBJ\Template.axf" - 0 Error(s), 17 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F1xx_DFP.2.3.0.pack
+                Keil.STM32F1xx_DFP.2.3.0
+                STMicroelectronics STM32F1 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  C:\Users\HELLO_WORLD\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include
+
+<h2>Collection of Component Files used:</h2>
+Build Time Elapsed:  00:00:03
+</pre>
+</body>
+</html>
