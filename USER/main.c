@@ -34,38 +34,10 @@ char Receive_BUF[500]={0};
 int setRun=1;
 uint8_t get_sub_str(char * str,char * separator1,char * separator2,int8_t num, char * substr);
 char Receive_Data[500]={0};
-int main(void)
-{
-	/* ÊµÑé1
-delay_init(); //???????
-Lcd_Init(); //??? LCD
-BACK_COLOR=BLACK; //?????
-POINT_COLOR=YELLOW; //?????
-LCD_Show_Chinese16x16(80,20,"ÊµÑé");
-LCD_ShowString(140,20,"1.5.1");
-LCD_ShowString(80,80,"This is a test!");//???????
-LCD_Show_Chinese16x16(80,120,"ÕâÊÇÒ»Ìõ²âÊÔÓï¾ä");
-while(1);
-	*/
-	/*
-	GPIO_Configuration();//GPIO ³õÊ¼»¯
-delay_init(); //ÑÓÊ±º¯Êý³õÊ¼»¯
-Lcd_Init(); //³õÊ¼»¯ LCD
-Usart1_Init(115200); //´®¿Ú 1 ³õÊ¼»¯
-Usart2_Init(115200); //´®¿Ú 2 ³õÊ¼»¯
-NB_PWR_ON(); //NB Ä£¿éÉÏµç
-BACK_COLOR=BLACK; //±³¾°ÎªºÚÉ«
-POINT_COLOR=YELLOW; //»­±ÊÎª»ÆÉ«
-LCD_Show_Chinese16x16(100,20,"ÊµÑé");
-LCD_ShowString(160,20,"2.5.1");
-LCD_Show_Chinese16x16(50,70,"´®¿ÚÍ¸´«Ä£Ê½£¡");
-LCD_ShowString(50,100,"usart1 <---> usart2");
-while(1);
-}
-*/
-
 unsigned char NB_Send_buf[355]={0};
 unsigned char n;
+int main(void)
+{
 GPIO_Configuration();//GPIO ³õÊ¼»¯
 delay_init(); //ÑÓÊ±º¯Êý³õÊ¼»¯
 Usart1_Init(115200); //ÏÂÔØ¿Ú¡¢µ÷ÊÔ¶Ë¿Ú
@@ -165,15 +137,6 @@ Y_LED_ON;
 n = 3;
 while(n--)
 {
-	/*
-USART1TxStr("ÅäÖÃµçÐÅ IOT Æ½Ì¨µØÖ·ºÍ¶Ë¿ÚºÅ...\r\n");
-n_str = (3-n)+'0';
-LCD_ShowString(8*1-3,16*5,&n_str);
-LCD_ShowString(8*2,16*5,"AT+QLWSERV=\"221.229.214.202\",5683");
-USART2TxStr("AT+QLWSERV=\"221.229.214.202\",5683\r\n");//ÅäÖÃµçÐÅ IOT Æ½Ì¨µØÖ·ºÍ¶Ë¿Ú£¬·µ»Ø¸ñÊ½£ºOK
-if(!Wait_Str1_Str2_x_100ms(2,1,1,"OK","",50))
-n = 0;
-	*/
 USART1TxStr("ÅäÖÃµçÐÅ IOT Æ½Ì¨µØÖ·ºÍ¶Ë¿ÚºÅ...\r\n");
 n_str = (3-n)+'0';
 LCD_ShowString(8*1-3,16*5,&n_str);
@@ -184,7 +147,7 @@ USART2TxStr("AT+QMTOPEN=0,\"mqtt.ctwing.cn\",1883\r\n");//ÅäÖÃµçÐÅ IOT Æ½Ì¨µØÖ·º
 G_LED_ON;
 Y_LED_OFF;
 R_LED_OFF;
-LCD_ShowString(8*2,16*6,"MQTT connection has been open");
+LCD_ShowString(8*2,16*6,"MQTT connection opened");
 	}else{
 		n=3;
 	}
@@ -199,7 +162,7 @@ while(n--)
 USART1TxStr("Á¬½ÓMQTT\r\n");
 n_str = (3-n)+'0';
 LCD_ShowString(8*1-3,16*7,&n_str);
-LCD_ShowString(8*2,16*7,"connecting to the aep ");
+LCD_ShowString(8*2,16*7,"connecting to the aep... ");
 USART2TxStr("AT+QMTCONN=0,\"15228122bc26zzg123\",\"d99b322bbd30467e93560f73c2c8b00e\",\"bY8mUy1JTrM8Sp-l1EgLD47FFVnBuFdITRTACe2cwrk\"\r\n");//Ìí¼Ó LwM2M ¶ÔÏó£¬·µ»Ø¸ñÊ½£ºOK
 //Wait_Str1_Str2_x_100ms(5,1,1,"UPDATE OK","",25);
 	if(!Wait_Str1_Str2_x_100ms(2,1,1,"+QMTCONN: 0,0,0","",50))
@@ -208,7 +171,7 @@ USART2TxStr("AT+QMTCONN=0,\"15228122bc26zzg123\",\"d99b322bbd30467e93560f73c2c8b
 G_LED_ON;
 Y_LED_OFF;
 R_LED_OFF;
-LCD_ShowString(8*2,16*8,"MQTT connection has finished");
+LCD_ShowString(8*2,16*8,"MQTT connection  established");
 	}
 
 delay_ms(1000);delay_ms(1000);delay_ms(1000);
@@ -230,7 +193,7 @@ USART2TxStr("AT+QMTSUB=0,1,\"run_flag\",0\r\n");//
 G_LED_ON;
 Y_LED_OFF;
 R_LED_OFF;
-LCD_ShowString(8*2,16*10,"MQTT subcribe has finished");
+LCD_ShowString(8*2,16*10,"MQTT subcribe completed");
 	}
 }CLR_Buf2();
 Y_LED_OFF;
@@ -469,7 +432,6 @@ void SendData(){
 	char tipStirng[25]={0};
 	char tempString[255]={0};
 	char jsonTemp[255]={0};
-	char debug[20]={0};
 	int index;
 int n1=0;
 IntToChar(seqNum,seqNum1);
@@ -494,7 +456,6 @@ if(!Wait_Str1_Str2_x_100ms(2,1,1,"+QMTRECV:","",20)){
 	setRun=cJSON_GetObjectItem(payload,"run_flag")->valueint;
 	sprintf(jsonTemp,"test:%d id:%d",setRun,id);
 	USART1TxStr(jsonTemp);//´ò°ü³É¹¦µ÷ÓÃcJSON_Print´òÓ¡Êä³ö
-	//LCD_ShowString(8*2,16*12,setRun);
 	
 	cJSON_Delete(cjson);
 	for(n1=0;n1<500;n1++){
@@ -502,15 +463,12 @@ if(!Wait_Str1_Str2_x_100ms(2,1,1,"+QMTRECV:","",20)){
 		Receive_Data[n1]='\0';
 	}
 	
-
+	CLR_Buf2();
 }
-CLR_Buf2();
+
 if(setRun==0){
 	USART1TxStr("dsdsdasdas");
 }else{
-sprintf(debug,"test:%d id:%d",setRun,id);
-USART1TxStr(debug);//´ò°ü³É¹¦µ÷ÓÃcJSON_Print´òÓ¡Êä³ö
-
 //USART2TxStr("AT\r\n");//²âÊÔ NB Ä£¿é
 //USART1TxStr(NB_Send_buf1);
 //USART1TxStr("\r\n");
