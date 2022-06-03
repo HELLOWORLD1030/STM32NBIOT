@@ -1,6 +1,6 @@
 Dependencies for Project 'NB-Iot', Target 'NB-Iot': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
-F (.\main.c)(0x62978A1A)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\STM32F10X_FWLIB\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HARDWARE\lcd -I ..\HARDWARE\spi -I ..\HARDWARE\gpio -I ..\HARDWARE\ITEMP -I ..\SYSTEM\cJson-IC:\Users\HELLO_WORLD\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="534" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
+F (.\main.c)(0x6299571A)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\STM32F10X_FWLIB\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HARDWARE\lcd -I ..\HARDWARE\spi -I ..\HARDWARE\gpio -I ..\HARDWARE\ITEMP -I ..\SYSTEM\cJson-IC:\Users\HELLO_WORLD\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="534" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
 I (stm32f10x.h)(0x5F98CA9C)
 I (..\CORE\core_cm3.h)(0x5F98CAAE)
 I (D:\MDK\ARM\ARMCC\include\stdint.h)(0x5E8E3CC2)

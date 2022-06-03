@@ -33,7 +33,7 @@ float temp;
 char Receive_BUF[500]={0};
 int setRun=1;
 uint8_t get_sub_str(char * str,char * separator1,char * separator2,int8_t num, char * substr);
-char Receive_Data[250]={0};
+char Receive_Data[500]={0};
 int main(void)
 {
 	/* 实验1
@@ -92,7 +92,7 @@ delay_ms(1500);
 delay_ms(1500);
 delay_ms(1500);
 
-
+/*
 if((Flag_Usart1_Receive) && (!Count_Timer3_value_USART1_receive_timeout))//如果串口 1 接收到数据且未超时
 {
 Flag_Usart1_Receive = 0; //接收标志清零
@@ -103,7 +103,7 @@ USART1TxStr(USART1_RX_BUF);
 CLR_Buf1(); //清空串口 1
 
 }
-
+*/
 }
 }
 void Init_Nbiot(void)//初始化 Nbiot 模块
@@ -145,6 +145,18 @@ LCD_ShowString(8*1-3,16*4,&n_str);
 LCD_ShowString(8*2,16*4,"AT+CGPADDR=1");
 USART2TxStr("AT+CGPADDR=1\r\n");//查询设备的 PDP 地址，返回格式：+CGPADDR: 1,21.176.194.17,0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1 后跟 OK
 if(!Wait_Str1_Str2_x_100ms(2,2,2,"+CGPADDR:","OK",50))
+n = 0;
+}CLR_Buf2();
+Y_LED_OFF;
+delay_ms(1000);
+Y_LED_ON;
+n = 3;
+while(n--)
+{
+USART1TxStr("禁止休眠...\r\n");
+n_str = (3-n)+'0';
+USART2TxStr("AT+CPSMS=0\r\n");//测试 NB 模块
+if(!Wait_Str1_Str2_x_100ms(2,1,1,"OK","",50))
 n = 0;
 }CLR_Buf2();
 Y_LED_OFF;
@@ -454,10 +466,10 @@ void SendData(){
 	int id ;
 	cJSON* cjson;
 	cJSON* payload;
-	cJSON* setRUN;
 	char tipStirng[25]={0};
 	char tempString[255]={0};
 	char jsonTemp[255]={0};
+	char debug[20]={0};
 	int index;
 int n1=0;
 IntToChar(seqNum,seqNum1);
@@ -476,20 +488,29 @@ if(!Wait_Str1_Str2_x_100ms(2,1,1,"+QMTRECV:","",20)){
 	//USART1TxStr(tempString);
 	
 	cjson = cJSON_Parse(tempString);
+	USART1TxStr(tempString);//打包成功调用cJSON_Print打印输出
 	id = cJSON_GetObjectItem(cjson,"taskId")->valueint;
 	payload=cJSON_GetObjectItem(cjson,"payload");
 	setRun=cJSON_GetObjectItem(payload,"run_flag")->valueint;
-	sprintf(jsonTemp,"test:%d",setRun);
+	sprintf(jsonTemp,"test:%d id:%d",setRun,id);
 	USART1TxStr(jsonTemp);//打包成功调用cJSON_Print打印输出
 	//LCD_ShowString(8*2,16*12,setRun);
 	
 	cJSON_Delete(cjson);
-	cJSON_Delete(payload);
+	for(n1=0;n1<500;n1++){
+		Receive_BUF[n1]='\0';
+		Receive_Data[n1]='\0';
+	}
+	
 
 }
+CLR_Buf2();
 if(setRun==0){
-	return;
-}
+	USART1TxStr("dsdsdasdas");
+}else{
+sprintf(debug,"test:%d id:%d",setRun,id);
+USART1TxStr(debug);//打包成功调用cJSON_Print打印输出
+
 //USART2TxStr("AT\r\n");//测试 NB 模块
 //USART1TxStr(NB_Send_buf1);
 //USART1TxStr("\r\n");
@@ -523,7 +544,7 @@ for(i = addr;i < 355;i ++)
 NB_Send_buf1[i] = 0;
 }
 CLR_Buf2();
-
+}
 }
 float GetTemp(){
 	int temp;
