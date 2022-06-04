@@ -56,7 +56,6 @@ if(Flag_Need_Init_Nbiot)
 {
 Flag_Need_Init_Nbiot = 0;
 Init_Nbiot();
-USART1TxStr("请发送英文字符，并以回车结束！\r\n");
 }
 
 SendData();
@@ -200,29 +199,6 @@ Y_LED_OFF;
 delay_ms(1000);
 Y_LED_ON;
 n = 3;
-}
-char *my_strcat(char *str1, char *str2) //拼接字符串
-{
- char *pt = str1;
- while(*str1!='\0') str1++;
- while(*str2!='\0') *str1++ = *str2++;
- *str1 = '\0';
- return pt;
-}
-
-void Wait_OK(void)
-{
-while(!Flag_usart1_receive_OK);
-Flag_usart1_receive_OK = 0;
-CLR_Buf1(); //清除串口 1 接收缓存
-}
-void copy_str(char* des,char* src,unsigned char len)
-{
-unsigned char i;
-for(i = 0;i < len;i ++)
-{
-*(des + i) = *(src + i);
-}
 }
 bool Wait_Str_x_100ms(char* str1,char* str2,unsigned char time_x_100ms)
 {
@@ -467,11 +443,8 @@ if(!Wait_Str1_Str2_x_100ms(2,1,1,"+QMTRECV:","",20)){
 }
 
 if(setRun==0){
-	USART1TxStr("dsdsdasdas");
-}else{
-//USART2TxStr("AT\r\n");//测试 NB 模块
-//USART1TxStr(NB_Send_buf1);
-//USART1TxStr("\r\n");
+	return;
+}
 
 USART2TxStr((char*)NB_Send_buf1);//通过 NB 模块发送数据
 LCD_ShowString(8*2,16*12,"send....");
@@ -488,7 +461,7 @@ sprintf(tipStirng,"Temperature: %.2f",temp);
 LCD_ShowString(8*15,16*12,tipStirng);
 }
 
-else //发送数据三次都失败
+else //发送失败
 {
 G_LED_OFF;
 Y_LED_OFF;
@@ -502,8 +475,11 @@ for(i = addr;i < 355;i ++)
 NB_Send_buf1[i] = 0;
 }
 CLR_Buf2();
+
 }
-}
+/*
+	获取当前温度
+*/
 float GetTemp(){
 	int temp;
 	float temp1;
@@ -552,6 +528,3 @@ uint8_t get_sub_str(char * str,char * separator1,char * separator2,int8_t num, c
 
 	return 0;
 }
-
-
-
