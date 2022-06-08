@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\USER;..\STM32F10X_FWLIB\inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\lcd;..\HARDWARE\spi;..\HARDWARE\gpio;..\HARDWARE\ITEMP;..\SYSTEM\cJson</IncludePath>
+              <IncludePath>..\CORE;..\USER;..\STM32F10X_FWLIB\inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\lcd;..\HARDWARE\spi;..\HARDWARE\gpio;..\HARDWARE\ITEMP;..\SYSTEM\cJson;..\HARDWARE\EXTI;..\HARDWARE\KEY</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -622,6 +622,26 @@
               <FileName>tsensor.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\HARDWARE\ITEMP\tsensor.h</FilePath>
+            </File>
+            <File>
+              <FileName>exti.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\EXTI\exti.c</FilePath>
+            </File>
+            <File>
+              <FileName>exti.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\HARDWARE\EXTI\exti.h</FilePath>
+            </File>
+            <File>
+              <FileName>key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\KEY\key.c</FilePath>
+            </File>
+            <File>
+              <FileName>key.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\HARDWARE\KEY\key.h</FilePath>
             </File>
           </Files>
         </Group>

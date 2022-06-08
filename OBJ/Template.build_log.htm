@@ -22,7 +22,7 @@ Dialog DLL:      TCM.DLL V1.48.0.0
  
 <h2>Project:</h2>
 E:\¿Î³Ì×ÊÁÏ\NB-IOt\NB-Iot-MQTT\USER\NB-Iot.uvprojx
-Project File Date:  06/01/2022
+Project File Date:  06/05/2022
 
 <h2>Output:</h2>
   
@@ -39,29 +39,29 @@ compiling main.c...
   #endif
 ..\HARDWARE\gpio\GPIO.h(15): warning:  #1-D: last line of file ends without a newline
   #endif /* __GPIO_H */
-main.c(30): warning:  #1295-D: Deprecated declaration SendData - give arg types
-  void SendData();
-main.c(31): warning:  #1295-D: Deprecated declaration GetTemp - give arg types
-  float GetTemp();
-main.c(45): warning:  #223-D: function "TIM3_Int_Init" declared implicitly
+main.c(18): warning:  #1295-D: Deprecated declaration SendData - give arg types
+  void SendData();//????????????
+main.c(19): warning:  #1295-D: Deprecated declaration GetTemp - give arg types
+  float GetTemp();//????????
+main.c(20): warning:  #1295-D: Deprecated declaration DisConnectFromMQTT - give arg types
+  void DisConnectFromMQTT();//????MQTT??????????????
+main.c(42): warning:  #223-D: function "TIM3_Int_Init" declared implicitly
   TIM3_Int_Init(999,7199); //?????????? 3?????? 100ms
-main.c(144): warning:  #69-D: integer conversion resulted in truncation
+main.c(63): warning:  #111-D: statement is unreachable
+  	return 0;
+main.c(129): warning:  #69-D: integer conversion resulted in truncation
   	if(!Wait_Str1_Str2_x_100ms(2,1,1,"+QMTOPEN: 0,0","",300))
-main.c(82): warning:  #177-D: variable "j"  was declared but never referenced
+main.c(67): warning:  #177-D: variable "j"  was declared but never referenced
   unsigned int i,j,n = 3;
-main.c(84): warning:  #550-D: variable "temp_str"  was set but never used
+main.c(69): warning:  #550-D: variable "temp_str"  was set but never used
   char temp_str[30];
-main.c(417): warning:  #167-D: argument of type "unsigned char *" is incompatible with parameter of type "const char *restrict"
+main.c(395): warning:  #167-D: argument of type "unsigned char *" is incompatible with parameter of type "char *restrict"
+  sprintf(NB_Send_buf,"AT+QMTPUB=0,0,0,0,\"upload_data_flag\",\"{\"Test_flag\":\"%.2f\"}\"\r\n",temperature);
+main.c(397): warning:  #167-D: argument of type "unsigned char *" is incompatible with parameter of type "const char *restrict"
   	strcpy(Receive_BUF,USART2_RX_BUF);
-main.c(484): warning:  #177-D: variable "temp"  was declared but never referenced
-  	int temp;
-main.c(486): warning:  #550-D: variable "TempInt"  was set but never used
-  	int TempInt;
-main.c(530): warning:  #1-D: last line of file ends without a newline
-  }
 main.c: 14 warnings, 0 errors
 linking...
-Program Size: Code=25308 RO-data=3036 RW-data=160 ZI-data=8288  
+Program Size: Code=24996 RO-data=3036 RW-data=148 ZI-data=7548  
 FromELF: creating hex file...
 "..\OBJ\Template.axf" - 0 Error(s), 15 Warning(s).
 

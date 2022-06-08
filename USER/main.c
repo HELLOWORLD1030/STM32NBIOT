@@ -7,35 +7,32 @@
 #include <string.h>
 #include "tsensor.h"
 #include "cJson.h"
-unsigned char addr = 0;
-unsigned int i;
+//函数原型
 unsigned char Query(char * src,char * des,unsigned int LEN);
 bool Wait_Str_x_100ms(char* str1,char* str2,unsigned char time_x_100ms);
-bool Wait_Str1_Str2_x_100ms(char uartx,char and_or,char str_NO,char* str1,char* str2,unsigned char 
-time_x_100ms);
+bool Wait_Str1_Str2_x_100ms(char uartx,char and_or,char str_NO,char* str1,char* str2,unsigned char time_x_100ms);
 bool Wait_OK_x_100ms(unsigned char time_x_100ms);
-void Wait_OK(void);
-void copy_str(char* des,char* src,unsigned char len);
-void DealUpData(char *from,uint8_t *to,uint16_t len);
-void Array_CLR(char *src,char len) ;
+void IntToChar(int num,char*);//数字转字符
 void Init_Nbiot(void);//初始化 Nbiot 模块
-bool Flag_Need_Init_Nbiot = 1;
-bool Flag_device_error = 0;
-int seqNum=0;
-char seqNum1[25];
+uint8_t get_sub_str(char * str,char * separator1,char * separator2,int8_t num, char * substr);//从网络平台下发信息中提取子字符串
+void SendData();//发送温度数据
+float GetTemp();//获取温度
+void DisConnectFromMQTT();//断开MQTT链接，正在调试
 void trim_string(char *str);
-void IntToChar(int num,char*);
-char usert[355]={0};
-char NB_Send_buf1[355]={0};
-void SendData();
-float GetTemp();
-float temp;
-char Receive_BUF[500]={0};
-int setRun=1;
-uint8_t get_sub_str(char * str,char * separator1,char * separator2,int8_t num, char * substr);
-char Receive_Data[500]={0};
-unsigned char NB_Send_buf[355]={0};
-unsigned char n;
+
+//全局变量声明
+unsigned char addr = 0;
+unsigned int i;
+bool Flag_Need_Init_Nbiot = 1;//需要初始化nbiot标识
+bool Flag_device_error = 0;
+char Receive_BUF[500]={0};//储存平台下发信息
+bool setRun=1;//运行标识
+char Receive_Data[500]={0};//存储平台下发payload
+unsigned char NB_Send_buf[355]={0};//发送缓冲区
+bool DisConnectFlag=0;//断开MQTT标识，调试中
+cJSON* cjson;//使用cJSON解析平台返回payload
+
+
 int main(void)
 {
 GPIO_Configuration();//GPIO 初始化
@@ -62,20 +59,8 @@ SendData();
 delay_ms(1500);
 delay_ms(1500);
 delay_ms(1500);
-
-/*
-if((Flag_Usart1_Receive) && (!Count_Timer3_value_USART1_receive_timeout))//如果串口 1 接收到数据且未超时
-{
-Flag_Usart1_Receive = 0; //接收标志清零
-USART1TxStr("中断传送 \r\n");
-USART1TxStr(USART1_RX_BUF);
-
-
-CLR_Buf1(); //清空串口 1
-
-}
-*/
-}
+}//while
+	return 0;
 }
 void Init_Nbiot(void)//初始化 Nbiot 模块
 {
@@ -200,6 +185,9 @@ delay_ms(1000);
 Y_LED_ON;
 n = 3;
 }
+
+
+
 bool Wait_Str_x_100ms(char* str1,char* str2,unsigned char time_x_100ms)
 {
 bool Flag_receive_right = 0;
@@ -242,6 +230,8 @@ return 1;//超时返回 1
 else
 return 0;//正常返回 0
 }
+
+
 bool Wait_Str1_Str2_x_100ms(char uartx,char and_or,char str_NO,char* str1,char* str2,unsigned char 
 time_x_100ms)
 {
@@ -306,8 +296,6 @@ Flag_receive_right = 1;
 }
 if(!Count_time_wait_ok)
 {
-//USART1TxStr("Flag_device_error = 1 \r\n");
-//USART1TxStr(USARTx_RX_BUF);
 Flag_device_error = 1;
 R_LED_ON;
 }
@@ -316,11 +304,6 @@ else
 R_LED_OFF;
 Flag_device_error = 0;
 }
-// USART1TxStr("Count_time_wait_ok = ");
-// USART1TxChar(Count_time_wait_ok / 100 + '0'); 
-// USART1TxChar(Count_time_wait_ok % 100 / 10 + '0'); 
-// USART1TxChar(Count_time_wait_ok % 10 + '0');
-// USART1TxStr("\r\n");
 delay_ms(100);
 if(Flag_device_error)
 return 1;//超时返回 1
@@ -340,11 +323,6 @@ Flag_device_error = 1;
 }
 else
 Flag_device_error = 0;
-// USART1TxStr("Count_time_wait_ok = ");
-// USART1TxChar(Count_time_wait_ok / 100 + '0'); 
-// USART1TxChar(Count_time_wait_ok % 100 / 10 + '0'); 
-// USART1TxChar(Count_time_wait_ok % 10 + '0');
-// USART1TxStr("\r\n");
 Flag_usart1_receive_OK = 0;
 delay_ms(100);
 if(Flag_device_error)
@@ -352,9 +330,7 @@ return 1;//超时返回 1
 else
 return 0;//正常返回 0
 }
-unsigned char Query(char * src,char * des,unsigned int LEN)
-//查询数组有无包含该字符串，有则返回 1，无则返回 0
-{
+unsigned char Query(char * src,char * des,unsigned int LEN){//查询数组有无包含该字符串，有则返回 1，无则返回 0
 unsigned int y= 0,len= 0,n= 0;
 unsigned char Result = 0;
 char * i;
@@ -381,9 +357,9 @@ if(n == len)
 {
 return Result;
 }
-}
+}// For
 return Result;
-}
+}//Query
 
 void trim_string(char *str)
 {
@@ -401,52 +377,56 @@ void trim_string(char *str)
 		str[len] = 0;	//给字符串最后一个字符赋0，即结束符
 	}
 }
+
+/*
+	获取内部温度传感器温度，发送至BC26模块，并检测是否有下发数据到达
+*/
 void SendData(){
 	int id ;
-	cJSON* cjson;
 	cJSON* payload;
-	char tipStirng[25]={0};
-	char tempString[255]={0};
-	char jsonTemp[255]={0};
+	char tipStirng[25]={0};//屏幕显示温度
+	char tempString[255]={0};//存放处理好的Json字符串
+	char jsonTemp[255]={0};//调试用
 	int index;
+	float temperature;
+
 int n1=0;
-IntToChar(seqNum,seqNum1);
-temp=GetTemp();
-sprintf(NB_Send_buf1,"AT+QMTPUB=0,0,0,0,\"upload_data_flag\",\"{\"Test_flag\":\"%.2f\"}\"\r\n",temp);
+temperature=GetTemp();
+sprintf(NB_Send_buf,"AT+QMTPUB=0,0,0,0,\"upload_data_flag\",\"{\"Test_flag\":\"%.2f\"}\"\r\n",temperature);
 if(!Wait_Str1_Str2_x_100ms(2,1,1,"+QMTRECV:","",20)){
 	strcpy(Receive_BUF,USART2_RX_BUF);
 	
 	USART1TxStr("\r\n");
-	get_sub_str((char *)Receive_BUF,",","\r\n",2,Receive_Data);
+	get_sub_str((char *)Receive_BUF,",","\r\n",2,Receive_Data);//解析下发数据，获取payload数据
 	
 	
-	for(index=1;index<strlen(Receive_Data)-1;index++){
+	for(index=1;index<strlen(Receive_Data)-1;index++){//去除前后的引号
 		tempString[index-1]=Receive_Data[index];
 	}
 	//USART1TxStr(tempString);
 	
 	cjson = cJSON_Parse(tempString);
-	USART1TxStr(tempString);//打包成功调用cJSON_Print打印输出
+	USART1TxStr(tempString);//
 	id = cJSON_GetObjectItem(cjson,"taskId")->valueint;
 	payload=cJSON_GetObjectItem(cjson,"payload");
 	setRun=cJSON_GetObjectItem(payload,"run_flag")->valueint;
 	sprintf(jsonTemp,"test:%d id:%d",setRun,id);
-	USART1TxStr(jsonTemp);//打包成功调用cJSON_Print打印输出
+	USART1TxStr(jsonTemp);//
 	
 	cJSON_Delete(cjson);
-	for(n1=0;n1<500;n1++){
+	for(n1=0;n1<500;n1++){//字符数组清零
 		Receive_BUF[n1]='\0';
 		Receive_Data[n1]='\0';
 	}
 	
 	CLR_Buf2();
-}
+}// if(!Wait_Str1_Str2_x_100ms(2,1,1,"+QMTRECV:","",20))
 
 if(setRun==0){
 	return;
-}
+} 
 
-USART2TxStr((char*)NB_Send_buf1);//通过 NB 模块发送数据
+USART2TxStr((char*)NB_Send_buf);//通过 NB 模块发送数据
 LCD_ShowString(8*2,16*12,"send....");
 if(!Wait_Str1_Str2_x_100ms(2,1,1,"OK","",20)) //如果收到发送成功返回的数据
 {
@@ -457,7 +437,7 @@ R_LED_OFF;
 Flag_Need_Init_Nbiot = 0;
 LCD_ShowString(8*2,16*12,"send ok!");
 
-sprintf(tipStirng,"Temperature: %.2f",temp);
+sprintf(tipStirng,"Temperature: %.2f",temperature);
 LCD_ShowString(8*15,16*12,tipStirng);
 }
 
@@ -472,7 +452,7 @@ LCD_ShowString(8*2,16*12,"Fail ! ");
 
 for(i = addr;i < 355;i ++)
 {
-NB_Send_buf1[i] = 0;
+NB_Send_buf[i] = 0;
 }
 CLR_Buf2();
 
@@ -481,9 +461,7 @@ CLR_Buf2();
 	获取当前温度
 */
 float GetTemp(){
-	int temp;
 	float temp1;
-	int TempInt;
 	float TempFloat;
 	unsigned long adcx;
 	adcx=T_Get_Adc_Average(ADC_CH_TEMP,10);
@@ -491,10 +469,16 @@ float GetTemp(){
 	
 	temp1-=(u8)temp1;
 	TempFloat=(1.43-TempFloat)/0.0043+25;
-	TempInt=temp1*1000;
 	
 	return TempFloat;
 }
+
+
+/*
+	数字转字符串
+	num 传入数字
+	
+*/
 void IntToChar(int num,char* dest){
     char str2[25];
     sprintf(str2,"%d",num);
@@ -502,6 +486,9 @@ void IntToChar(int num,char* dest){
     strcpy(dest,str2);
 
 }
+
+
+
 /*
 * 取两个分隔符之间的子串
 * str  原始字符串
@@ -510,8 +497,7 @@ void IntToChar(int num,char* dest){
 * num  字符串出现几次时，作为第一个分隔符的位置。
 * substr  取出的两个分隔符间的子串，从0起数。"+QMTRECV: 0,0,"Hello",hello world"
 */
-uint8_t get_sub_str(char * str,char * separator1,char * separator2,int8_t num, char * substr)
-{
+uint8_t get_sub_str(char * str,char * separator1,char * separator2,int8_t num, char * substr){
 	int8_t i;
 	char *p1,*p2;
 
@@ -521,10 +507,25 @@ uint8_t get_sub_str(char * str,char * separator1,char * separator2,int8_t num, c
 		if(p1 == NULL) return 1;
 		p1++;
 	}
-
 	p2 = strstr(p1,separator2);
 	if(p2 == NULL) return 2;
 	memcpy(substr,p1,p2-p1);
 
 	return 0;
+}
+
+
+void DisConnectFromMQTT(){
+	if(DisConnectFlag==1){
+		USART1TxStr("连接MQTT\r\n");
+		LCD_ShowString(8*2,16*11,"disconnect ");
+		USART2TxStr("AT+QMTDISC=0\r\n");//添加 LwM2M 对象，返回格式：OK
+//Wait_Str1_Str2_x_100ms(5,1,1,"UPDATE OK","",25);
+		if(!Wait_Str1_Str2_x_100ms(2,1,1,"+QMTDISC: 0,0","",50)){
+			G_LED_ON;
+			Y_LED_OFF;
+			R_LED_OFF;
+			LCD_ShowString(8*2,16*11,"disconnected...");
+	}
+ }
 }
